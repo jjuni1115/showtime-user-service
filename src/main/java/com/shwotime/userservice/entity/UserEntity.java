@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Table(name = "user")
 @Entity
 @Builder
@@ -21,5 +23,7 @@ public class UserEntity {
     private String name;
     private String password;
     private String email;
+    private String role;
+
 
 }
