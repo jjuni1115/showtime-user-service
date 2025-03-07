@@ -45,7 +45,21 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    //TODO: generate refresh token
+
+    public String generateRefreshToken(String userEmail) {
+        UserEntity user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+        return Jwts.builder()
+                .subject(userEmail)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .claim("userEmail", user.getEmail())
+                .claim("userName", user.getName())
+                .claim("userId", user.getId())
+                .signWith(key)
+                .compact();
+    }
 
 
     public Boolean validateToken(String token) {

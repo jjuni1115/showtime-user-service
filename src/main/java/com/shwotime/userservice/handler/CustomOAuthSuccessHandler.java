@@ -2,6 +2,7 @@ package com.shwotime.userservice.handler;
 
 import com.shwotime.userservice.util.JwtTokenProvider;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +34,30 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
         if(role!=null && role.equals("ROLE_GUEST")){
 
-            //TODO: redirect to registration page
-            response.sendRedirect("http://localhost:5173/signup");
+            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/signup")
+                    .queryParam("email",email)
+                    .queryParam("name",name)
+                    .build().encode().toUriString();
+
+            response.sendRedirect(redirectUrl);
 
         }else{
 
-            //TODO: generate token and redirect to home page
             String token = jwtTokenProvider.generateToken(email);
 
+
+
+            String refreshToken = jwtTokenProvider.generateRefreshToken(email);
+
+            Cookie cookie = new Cookie("refreshToken",refreshToken);
+            cookie.setSecure(true);
+            cookie.setPath("/user/reissue");
+
+
+
             String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/home").queryParam("token",token).build().toUriString();
+
+            response.addCookie(cookie);
 
             response.sendRedirect(redirectUrl);
 
