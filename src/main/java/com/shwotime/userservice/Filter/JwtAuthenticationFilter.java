@@ -1,12 +1,14 @@
 package com.shwotime.userservice.Filter;
 
 import com.shwotime.userservice.util.JwtTokenProvider;
+import com.shwotime.userservice.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -24,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-        if(header == null && !header.startsWith("Bearer")){
+        if(header == null || !header.startsWith("Bearer")){
             filterChain.doFilter(request,response);
             return;
         }
@@ -33,6 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(jwtTokenProvider.validateToken(token)){
 
             //TODO: Authentication
+            String userEmail = jwtUtil.getUserEmail();
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail,null,null);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+
 
         }
 
