@@ -2,6 +2,7 @@ package com.shwotime.userservice.util;
 
 import com.shwotime.userservice.entity.UserEntity;
 import com.shwotime.userservice.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -70,6 +71,12 @@ public class JwtTokenProvider {
             return false;
         }
 
+    }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build().parseSignedClaims(token).getPayload();
     }
 
 
