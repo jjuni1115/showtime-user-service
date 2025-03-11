@@ -38,6 +38,8 @@ public class UserService {
                 .name(req.getUserName())
                 .gender(req.getGender())
                 .phoneNumber(req.getPhoneNumber())
+                .age(req.getAge())
+                .nickName(req.getNickName())
                 .password(passwordEncoder.encode(req.getUserPassword()))
                 .role(Role.USER)
                 .build();

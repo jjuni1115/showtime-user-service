@@ -1,8 +1,12 @@
 package com.shwotime.userservice.endpoint;
 
+import com.shwotime.userservice.common.ApiResponse;
+import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
 import com.shwotime.userservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,22 +14,30 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserEndpoint {
 
+    private final HttpServletRequest httpServletRequest;
+
     private final UserService userService;
 
 
     @PostMapping("/register")
-    public Boolean createUserAccount(@RequestBody UserDto req){
+    public ResponseEntity<ApiResponse<String>> createUserAccount(@RequestBody UserDto req){
 
         userService.createUserAccount(req);
 
-        return true;
+        return ResponseEntity.ok(ApiResponse.ok("회원가입 성공",httpServletRequest.getRequestURI()));
 
     }
 
 
     @PostMapping("/login")
-    public String login(@RequestBody UserDto req){
-        return userService.userLogin(req);
+    public ResponseEntity<ApiResponse<TokenDto>> login(@RequestBody UserDto req){
+        String token = userService.userLogin(req);
+
+        TokenDto res = new TokenDto().builder()
+                .token(token)
+                .build();
+
+        return ResponseEntity.ok(ApiResponse.ok(res,httpServletRequest.getRequestURI()));
     }
 
 

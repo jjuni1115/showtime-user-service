@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -35,7 +40,7 @@ public class SecuritConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    private final String[] WHITE_LIST = {"/error","/fabicon.ico","/swagger-ui/**","/swagger-ui.html","/api-docs.html,'/oauth2/authorization/google","/user/register","/user/login"};
+    private final String[] WHITE_LIST = {"/error", "/fabicon.ico", "/swagger-ui/**", "/swagger-ui.html", "/api-docs.html,'/oauth2/authorization/google", "/user/register", "/user/login"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,13 +49,13 @@ public class SecuritConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request->request.requestMatchers(WHITE_LIST).permitAll().anyRequest().authenticated())
-                .oauth2Login(oauth2->oauth2
-                        .userInfoEndpoint(userInfo->userInfo.userService(customUserService)).successHandler(customOAuthSuccessHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(request -> request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll().requestMatchers(WHITE_LIST).permitAll().anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customUserService)).successHandler(customOAuthSuccessHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exception->exception.authenticationEntryPoint(customAuthenticationEntryPoint))
-                .exceptionHandling(exception->exception.accessDeniedHandler(customAccessDeniedHandler));
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler));
 
 
         return http.build();
@@ -59,8 +64,30 @@ public class SecuritConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(List.of("content-type"));
+        corsConfiguration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter(corsConfigurationSource());
     }
 
 }
