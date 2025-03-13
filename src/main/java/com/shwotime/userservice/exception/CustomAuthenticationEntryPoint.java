@@ -1,7 +1,7 @@
 package com.shwotime.userservice.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.shwotime.userservice.common.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,14 +26,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        log.error("Not Authenticated Request", authException);
-        log.error("Request Uri : {}", request.getRequestURI());
-
-
+        String responseBody = objectMapper.writeValueAsString(ApiResponse.error("UNAUTHORIZED EXCEPTION",request.getRequestURI(),"401"));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("Authentication Error");
+        response.getWriter().write(responseBody);
 
     }
 }

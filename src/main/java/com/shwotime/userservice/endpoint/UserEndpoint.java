@@ -5,6 +5,7 @@ import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
 import com.shwotime.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,11 @@ public class UserEndpoint {
                 .build();
 
         return ResponseEntity.ok(ApiResponse.ok(res,httpServletRequest.getRequestURI()));
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "test";
     }
 
 

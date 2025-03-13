@@ -56,7 +56,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 
 
-            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/home").queryParam("token",token).build().toUriString();
+            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth").queryParam("token",token).build().toUriString();
 
             response.addCookie(cookie);
 
