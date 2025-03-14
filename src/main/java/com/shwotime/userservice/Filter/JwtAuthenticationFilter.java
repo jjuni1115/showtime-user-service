@@ -1,5 +1,7 @@
 package com.shwotime.userservice.Filter;
 
+import com.shwotime.userservice.exception.CustomRuntimeException;
+import com.shwotime.userservice.type.ErrorCode;
 import com.shwotime.userservice.util.JwtTokenProvider;
 import com.shwotime.userservice.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -33,15 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
-        if(jwtTokenProvider.validateToken(token)){
+        if(jwtTokenProvider.validateToken(token)) {
 
-            //TODO: Authentication
+
             String userEmail = jwtUtil.getUserEmail();
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail,null,null);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail, null, null);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
 
-
+        }else{
+            System.out.println("Invalid Token");
         }
 
         filterChain.doFilter(request,response);

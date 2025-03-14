@@ -32,18 +32,24 @@ public class UserEndpoint {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenDto>> login(@RequestBody UserDto req){
-        String token = userService.userLogin(req);
+        TokenDto res = userService.userLogin(req);
 
-        TokenDto res = new TokenDto().builder()
-                .token(token)
-                .build();
 
         return ResponseEntity.ok(ApiResponse.ok(res,httpServletRequest.getRequestURI()));
     }
 
+
+    @PostMapping("/reissueToken")
+    public ResponseEntity<ApiResponse<TokenDto>> reissueToken(@CookieValue(value = "refreshToken") String refreshToken){
+        TokenDto token = userService.reissueToken(refreshToken);
+
+
+        return ResponseEntity.ok(ApiResponse.ok(token,httpServletRequest.getRequestURI()));
+    }
+
     @GetMapping("/test")
-    public String test(){
-        return "test";
+    public ResponseEntity<ApiResponse<String >> test(){
+        return ResponseEntity.ok(ApiResponse.ok("test",httpServletRequest.getRequestURI()));
     }
 
 
