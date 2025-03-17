@@ -47,6 +47,16 @@ public class UserEndpoint {
         return ResponseEntity.ok(ApiResponse.ok(token,httpServletRequest.getRequestURI()));
     }
 
+
+
+    //logout api delete refresh token in cookie
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Boolean>> logout(){
+        Boolean res = userService.logout();
+        return ResponseEntity.ok(ApiResponse.ok(res,httpServletRequest.getRequestURI()));
+    }
+
+
     @GetMapping("/test")
     public ResponseEntity<ApiResponse<String >> test(){
         return ResponseEntity.ok(ApiResponse.ok("test",httpServletRequest.getRequestURI()));

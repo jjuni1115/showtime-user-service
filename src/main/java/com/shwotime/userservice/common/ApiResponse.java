@@ -1,5 +1,6 @@
 package com.shwotime.userservice.common;
 
+import com.shwotime.userservice.type.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> error(String message,String path,String errorCode){
         return new ApiResponse<>(false,message,null,path,errorCode);
+    }
+
+    public static <T> ApiResponse<T> error(String path, ErrorCode errorCode){
+        return new ApiResponse<>(false,errorCode.getMessage(),null,path,errorCode.getCode());
     }
 
 

@@ -2,6 +2,8 @@ package com.shwotime.userservice.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shwotime.userservice.common.ApiResponse;
+import com.shwotime.userservice.type.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,9 +28,17 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        String responseBody = objectMapper.writeValueAsString(ApiResponse.error("UNAUTHORIZED EXCEPTION",request.getRequestURI(),"401"));
+
+        Exception exception = (Exception) request.getAttribute("exception");
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+
+        if(exception instanceof ExpiredJwtException){
+            errorCode = ErrorCode.TOKEN_EXPIRED_EXCEPTION;
+        }
+
+        String responseBody = objectMapper.writeValueAsString(ApiResponse.error(request.getRequestURI(),errorCode));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseBody);
 

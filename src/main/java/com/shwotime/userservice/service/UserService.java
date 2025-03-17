@@ -64,7 +64,7 @@ public class UserService {
 
     @Transactional
     public TokenDto userLogin(UserDto req) {
-        UserEntity userEntity = userRepository.findByEmail(req.getUserEmail()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        UserEntity userEntity = userRepository.findByEmail(req.getUserEmail()).orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND_EXCEPTION));
         if (passwordEncoder.matches(req.getUserPassword(), userEntity.getPassword())) {
 
             ServletRequestAttributes servletContainer = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -77,7 +77,7 @@ public class UserService {
             String token = jwtTokenProvider.generateToken(userEntity.getEmail());
             String refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getEmail());
 
-            CookieUtil.createCookie(response,"refreshToken",refreshToken,"/user/reissueToken",60*60*24);
+            CookieUtil.createCookie(response, "refreshToken", refreshToken, "/user/reissueToken", 60 * 60 * 24);
 
             TokenRedis tokenRedis = TokenRedis.builder()
                     .userEmail(userEntity.getEmail())
@@ -107,12 +107,12 @@ public class UserService {
         String userEmail = jwtUtil.getUserEmail();
 
 
-        if(refreshToken!=null && jwtTokenProvider.validateToken(refreshToken) && tokenRepository.findByUserEmail(userEmail).isPresent()){
+        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken) && tokenRepository.findByUserEmail(userEmail).isPresent()) {
 
             String token = jwtTokenProvider.generateToken(userEmail);
             String rotateRefreshToken = jwtTokenProvider.generateRefreshToken(userEmail);
-            CookieUtil.deleteCookie(response,"refreshToken");
-            CookieUtil.createCookie(response,"refreshToken",rotateRefreshToken,"/user/reissueToken",60*60*24);
+            CookieUtil.deleteCookie(response, "refreshToken");
+            CookieUtil.createCookie(response, "refreshToken", rotateRefreshToken, "/user/reissueToken", 60 * 60 * 24);
 
 
             TokenRedis tokenRedis = TokenRedis.builder()
@@ -126,12 +126,25 @@ public class UserService {
                     .token(token)
                     .build();
             return res;
-        }else{
+        } else {
             throw new CustomRuntimeException(ErrorCode.TOKEN_EXPIRED_EXCEPTION);
         }
 
 
+    }
 
+    @Transactional
+    public Boolean logout() {
+
+
+        ServletRequestAttributes servletContainer = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletResponse response = servletContainer.getResponse();
+
+        String userEmail = jwtUtil.getUserEmail();
+        tokenRepository.deleteById(userEmail);
+
+        CookieUtil.deleteCookie(response, "refreshToken");
+        return true;
     }
 
 }

@@ -11,7 +11,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(CustomRuntimeException.class)
     protected ResponseEntity<ApiResponse<String>> handleCustomException(CustomRuntimeException e){
 
-        return ResponseEntity.status(e.getErrorCode().getStatus()).body(ApiResponse.error(e.getMessage(),"",e.getErrorCode().getCode()));
+        return ResponseEntity.status(e.getErrorCode().getStatus()).body(ApiResponse.error(e.getErrorCode().getMessage(),"",e.getErrorCode().getCode()));
 
     }
 

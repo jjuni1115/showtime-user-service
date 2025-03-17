@@ -67,12 +67,10 @@ public class JwtTokenProvider {
 
 
     public Boolean validateToken(String token) {
-        try {
+
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
+
 
     }
 
