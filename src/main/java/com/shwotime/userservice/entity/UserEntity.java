@@ -19,6 +19,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     private String email;
@@ -32,6 +33,9 @@ public class UserEntity {
     private Role role;
     private String phoneNumber;
     private String gender;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<UserAddressEntity> userAddressEntityList;
 
 
 }
