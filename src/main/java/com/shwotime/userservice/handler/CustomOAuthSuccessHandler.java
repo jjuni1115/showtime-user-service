@@ -1,5 +1,6 @@
 package com.shwotime.userservice.handler;
 
+import com.shwotime.userservice.type.Role;
 import com.shwotime.userservice.util.JwtTokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -32,7 +33,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
         String name = oAuth2User.getAttribute("name");
 
 
-        if(role!=null && role.equals("ROLE_GUEST")){
+        if(role!=null && role.equals(Role.GUSET.getRoles())){
 
             String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/signup")
                     .queryParam("email",email)
@@ -55,7 +56,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 
 
-            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/home").queryParam("token",token).build().toUriString();
+            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth").queryParam("token",token).build().toUriString();
 
             response.addCookie(cookie);
 

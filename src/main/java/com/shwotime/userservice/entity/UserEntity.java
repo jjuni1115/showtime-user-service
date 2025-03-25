@@ -1,5 +1,6 @@
 package com.shwotime.userservice.entity;
 
+import com.shwotime.userservice.type.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,11 @@ public class UserEntity {
     private String password;
     private String name;
 
-    private String role;
+    private String nickName;
+    private int age;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private String phoneNumber;
     private String gender;
 
