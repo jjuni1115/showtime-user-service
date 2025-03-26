@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    private final String[] WHITE_LIST = {"/error", "/fabicon.ico", "/swagger-ui/**", "/swagger-ui.html", "/api-docs.html,'/oauth2/authorization/google", "/user/register", "/user/login"};
+    private final String[] WHITE_LIST = {"/error", "/fabicon.ico", "/swagger-ui/**", "/swagger-ui.html", "/api-docs.html,'/oauth2/authorization/google", "/user/register", "/user/login","/address/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

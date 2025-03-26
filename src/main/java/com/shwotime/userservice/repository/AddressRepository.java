@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
 
-    List<AddressEntity> findTopByAddressNmLikeOrAddressFullNmLikeOrderByAddressCode(String keyword1,String keyword2);
+    List<AddressEntity> findTop100ByAddressNmLikeOrAddressFullNmLikeOrderByAddressCode(String keyword1,String keyword2);
 
 
 }

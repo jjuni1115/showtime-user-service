@@ -13,12 +13,11 @@ import lombok.*;
 public class AddressEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long addressCode;
 
     private String addressNm;
     private String addressFullNm;
-    private String addressCode;
+    private String addressEngNm;
 
 
 }
