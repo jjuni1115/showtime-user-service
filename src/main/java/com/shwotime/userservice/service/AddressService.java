@@ -27,7 +27,7 @@ public class AddressService {
         return addressEntities.stream().map(addressEntity -> {
             AddressDto addressDto = new AddressDto();
             addressDto.setId(addressEntity.getAddressCode());
-            addressDto.setAddress(addressEntity.getAddressFullNm());
+            addressDto.setAddressNm(addressEntity.getAddressFullNm());
             return addressDto;
         }).collect(Collectors.toList());
 

@@ -2,10 +2,14 @@ package com.shwotime.userservice.service;
 
 import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
+import com.shwotime.userservice.entity.AddressEntity;
+import com.shwotime.userservice.entity.UserAddressEntity;
 import com.shwotime.userservice.entity.UserEntity;
 import com.shwotime.userservice.exception.CustomRuntimeException;
 import com.shwotime.userservice.redis.TokenRedis;
+import com.shwotime.userservice.repository.AddressRepository;
 import com.shwotime.userservice.repository.TokenRepository;
+import com.shwotime.userservice.repository.UserAddressRepository;
 import com.shwotime.userservice.repository.UserRepository;
 import com.shwotime.userservice.type.ErrorCode;
 import com.shwotime.userservice.type.Role;
@@ -26,6 +30,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +47,9 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     private final TokenRepository tokenRepository;
+    private final AddressRepository addressRepository;
+
+    private final UserAddressRepository userAddressRepository;
 
     @Transactional
     public Boolean createUserAccount(UserDto req) {
@@ -57,7 +67,27 @@ public class UserService {
                 .build();
 
 
-        userRepository.saveAndFlush(userEntity);
+
+        UserEntity userSaveEntity = userRepository.saveAndFlush(userEntity);
+
+        if(req.getAddressList()!=null){
+            List<UserAddressEntity> userAddress = req.getAddressList().stream().map(address -> {
+
+                Optional<AddressEntity> addressEntity = addressRepository.findById(Long.valueOf(address));
+
+                UserAddressEntity userAddressEntity = UserAddressEntity
+                        .builder()
+                        .userEntity(userSaveEntity)
+                        .addressId(addressEntity.get())
+                        .build();
+                return userAddressEntity;
+            }).collect(Collectors.toList());
+
+
+            userAddressRepository.saveAll(userAddress);
+        }
+
+
 
         return true;
     }

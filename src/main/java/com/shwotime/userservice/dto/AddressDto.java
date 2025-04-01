@@ -8,7 +8,7 @@ import lombok.Setter;
 public class AddressDto {
 
     private Long id;
-    private String address;
+    private String addressNm;
 
 
 }
