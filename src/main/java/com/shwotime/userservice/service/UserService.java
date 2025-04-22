@@ -24,6 +24,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtEncodingException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -50,6 +54,7 @@ public class UserService {
     private final AddressRepository addressRepository;
 
     private final UserAddressRepository userAddressRepository;
+
 
     @Transactional
     public Boolean createUserAccount(UserDto req) {
@@ -175,6 +180,17 @@ public class UserService {
 
         CookieUtil.deleteCookie(response, "refreshToken");
         return true;
+    }
+
+    @Transactional
+    public String getUserPassport(){
+        return null;
+
+    }
+
+    @Transactional
+    public String getUserId(){
+        return jwtUtil.getUserEmail();
     }
 
 }

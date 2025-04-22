@@ -57,9 +57,20 @@ public class UserEndpoint {
     }
 
 
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse<String >> test(){
-        return ResponseEntity.ok(ApiResponse.ok("test",httpServletRequest.getRequestURI()));
+    @GetMapping("/passport")
+    public ResponseEntity<ApiResponse<String>> getUserPassport(){
+        String passport = userService.getUserPassport();
+
+        return ResponseEntity.ok(ApiResponse.ok(passport,httpServletRequest.getRequestURI()));
+
+    }
+
+    @GetMapping("/user-id")
+    public ResponseEntity<ApiResponse<String>> getUserId(){
+        String userId = userService.getUserId();
+
+        return ResponseEntity.ok(ApiResponse.ok(userId,httpServletRequest.getRequestURI()));
+
     }
 
 
