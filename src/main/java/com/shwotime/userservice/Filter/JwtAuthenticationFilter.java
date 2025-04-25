@@ -1,7 +1,5 @@
 package com.shwotime.userservice.Filter;
 
-import com.shwotime.userservice.exception.CustomRuntimeException;
-import com.shwotime.userservice.type.ErrorCode;
 import com.shwotime.userservice.util.JwtTokenProvider;
 import com.shwotime.userservice.util.JwtUtil;
 import jakarta.servlet.FilterChain;

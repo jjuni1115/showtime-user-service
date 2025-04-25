@@ -1,6 +1,7 @@
 package com.shwotime.userservice.endpoint;
 
-import com.shwotime.userservice.common.ApiResponse;
+
+import com.showtime.coreapi.response.ApiResponse;
 import com.shwotime.userservice.dto.AddressDto;
 import com.shwotime.userservice.service.AddressService;
 import jakarta.servlet.http.HttpServletRequest;

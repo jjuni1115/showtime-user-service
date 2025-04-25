@@ -1,5 +1,6 @@
 package com.shwotime.userservice.type;
 
+import com.showtime.coreapi.type.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-public enum ErrorCode {
+public enum UserErrorCode  implements ErrorCode {
 
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401001","인증되지 않은 사용자입니다."),
     TOKEN_EXPIRED_EXCEPTION(HttpStatus.UNAUTHORIZED, "401002","만료된 토큰 입니다."),

@@ -1,7 +1,7 @@
 package com.shwotime.userservice.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shwotime.userservice.common.ApiResponse;
+import com.showtime.coreapi.response.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

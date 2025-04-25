@@ -1,33 +1,27 @@
 package com.shwotime.userservice.service;
 
+import com.showtime.coreapi.exception.CustomRuntimeException;
 import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
 import com.shwotime.userservice.entity.AddressEntity;
 import com.shwotime.userservice.entity.UserAddressEntity;
 import com.shwotime.userservice.entity.UserEntity;
-import com.shwotime.userservice.exception.CustomRuntimeException;
 import com.shwotime.userservice.redis.TokenRedis;
 import com.shwotime.userservice.repository.AddressRepository;
 import com.shwotime.userservice.repository.TokenRepository;
 import com.shwotime.userservice.repository.UserAddressRepository;
 import com.shwotime.userservice.repository.UserRepository;
-import com.shwotime.userservice.type.ErrorCode;
 import com.shwotime.userservice.type.Role;
+import com.shwotime.userservice.type.UserErrorCode;
 import com.shwotime.userservice.util.CookieUtil;
 import com.shwotime.userservice.util.JwtTokenProvider;
 import com.shwotime.userservice.util.JwtUtil;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.security.oauth2.jwt.JwtEncodingException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -99,7 +93,7 @@ public class UserService {
 
     @Transactional
     public TokenDto userLogin(UserDto req) {
-        UserEntity userEntity = userRepository.findByEmail(req.getUserEmail()).orElseThrow(() -> new CustomRuntimeException(ErrorCode.USER_NOT_FOUND_EXCEPTION));
+        UserEntity userEntity = userRepository.findByEmail(req.getUserEmail()).orElseThrow(() -> new CustomRuntimeException(UserErrorCode.USER_NOT_FOUND_EXCEPTION));
         if (passwordEncoder.matches(req.getUserPassword(), userEntity.getPassword())) {
 
             ServletRequestAttributes servletContainer = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -162,7 +156,7 @@ public class UserService {
                     .build();
             return res;
         } else {
-            throw new CustomRuntimeException(ErrorCode.TOKEN_EXPIRED_EXCEPTION);
+            throw new CustomRuntimeException(UserErrorCode.TOKEN_EXPIRED_EXCEPTION);
         }
 
 
