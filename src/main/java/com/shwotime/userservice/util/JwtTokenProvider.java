@@ -3,6 +3,7 @@ package com.shwotime.userservice.util;
 import com.shwotime.userservice.entity.UserEntity;
 import com.shwotime.userservice.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +52,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .subject(userEmail)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .expiration(new Date(System.currentTimeMillis() + 36000000))
                 .claim("userEmail", user.getEmail())
                 .claim("userName", user.getName())
                 .claim("userId", user.getId())
@@ -64,6 +65,20 @@ public class JwtTokenProvider {
 
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
+
+
+    }
+
+    public boolean validateTokenSignature(String token){
+
+        try {
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return true;
+        }catch (ExpiredJwtException e){
+            return true;
+        }catch (Exception e){
+            return false;
+        }
 
 
     }

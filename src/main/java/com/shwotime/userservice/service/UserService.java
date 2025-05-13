@@ -106,7 +106,7 @@ public class UserService {
             String token = jwtTokenProvider.generateToken(userEntity.getEmail());
             String refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getEmail());
 
-            CookieUtil.createCookie(response, "refreshToken", refreshToken, "/user/reissueToken", 60 * 60 * 24);
+            CookieUtil.createCookie(response, "refreshToken", refreshToken, "/user-service/user/reissueToken", 60 * 60 * 24);
 
             TokenRedis tokenRedis = TokenRedis.builder()
                     .userEmail(userEntity.getEmail())
@@ -136,7 +136,7 @@ public class UserService {
         String userEmail = jwtUtil.getUserEmail();
 
 
-        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken) && tokenRepository.findByUserEmail(userEmail).isPresent()) {
+        if (refreshToken != null && jwtTokenProvider.validateTokenSignature(refreshToken) && tokenRepository.findByUserEmail(userEmail).isPresent()) {
 
             String token = jwtTokenProvider.generateToken(userEmail);
             String rotateRefreshToken = jwtTokenProvider.generateRefreshToken(userEmail);
