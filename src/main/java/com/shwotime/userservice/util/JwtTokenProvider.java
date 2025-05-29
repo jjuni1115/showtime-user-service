@@ -1,14 +1,10 @@
 package com.shwotime.userservice.util;
 
 import com.shwotime.userservice.entity.UserEntity;
-import com.shwotime.userservice.exception.CustomRuntimeException;
 import com.shwotime.userservice.repository.UserRepository;
-import com.shwotime.userservice.type.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 
 @Component
@@ -57,7 +52,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .subject(userEmail)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .expiration(new Date(System.currentTimeMillis() + 36000000))
                 .claim("userEmail", user.getEmail())
                 .claim("userName", user.getName())
                 .claim("userId", user.getId())
@@ -67,12 +62,24 @@ public class JwtTokenProvider {
 
 
     public Boolean validateToken(String token) {
+
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return true;
+
+
+    }
+
+    public boolean validateTokenSignature(String token){
+
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        }catch (ExpiredJwtException e){
+            return true;
+        }catch (Exception e){
             return false;
         }
+
 
     }
 

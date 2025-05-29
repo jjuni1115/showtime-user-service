@@ -1,6 +1,6 @@
 package com.shwotime.userservice.endpoint;
 
-import com.shwotime.userservice.common.ApiResponse;
+import com.showtime.coreapi.response.ApiResponse;
 import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
 import com.shwotime.userservice.service.UserService;
@@ -39,7 +39,7 @@ public class UserEndpoint {
     }
 
 
-    @PostMapping("/reissueToken")
+    @GetMapping("/reissueToken")
     public ResponseEntity<ApiResponse<TokenDto>> reissueToken(@CookieValue(value = "refreshToken") String refreshToken){
         TokenDto token = userService.reissueToken(refreshToken);
 
@@ -47,9 +47,30 @@ public class UserEndpoint {
         return ResponseEntity.ok(ApiResponse.ok(token,httpServletRequest.getRequestURI()));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse<String >> test(){
-        return ResponseEntity.ok(ApiResponse.ok("test",httpServletRequest.getRequestURI()));
+
+
+    //logout api delete refresh token in cookie
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Boolean>> logout(){
+        Boolean res = userService.logout();
+        return ResponseEntity.ok(ApiResponse.ok(res,httpServletRequest.getRequestURI()));
+    }
+
+
+    @GetMapping("/passport")
+    public ResponseEntity<ApiResponse<String>> getUserPassport(){
+        String passport = userService.getUserPassport();
+
+        return ResponseEntity.ok(ApiResponse.ok(passport,httpServletRequest.getRequestURI()));
+
+    }
+
+    @GetMapping("/user-id")
+    public ResponseEntity<ApiResponse<String>> getUserId(){
+        String userId = userService.getUserId();
+
+        return ResponseEntity.ok(ApiResponse.ok(userId,httpServletRequest.getRequestURI()));
+
     }
 
 
