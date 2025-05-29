@@ -20,6 +20,10 @@ public class JwtUtil {
         return jwtTokenProvider.extractAllClaims(token).get("userEmail").toString();
     }
 
+    public String getUserEmail(String token){
+        return jwtTokenProvider.extractAllClaims(token).get("userEmail").toString();
+    }
+
 
 
 

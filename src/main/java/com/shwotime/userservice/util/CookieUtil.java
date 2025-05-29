@@ -2,22 +2,23 @@ package com.shwotime.userservice.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CookieUtil {
 
     public static void createCookie(HttpServletResponse response, String cookieName, String domain, String cookieValue, String path, Integer lifeTime){
-        Cookie cookie = new Cookie(cookieName,cookieValue);
-        cookie.setDomain(domain);
-        cookie.setPath(path);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        ResponseCookie cookie = ResponseCookie.from(cookieName, cookieValue)
+                .domain(domain)
+                .path(path)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None") // 여기서 설정 가능
+                .maxAge(lifeTime)
+                .build();
 
-        //cookie.setAttribute("SameSite","None");
-
-        cookie.setMaxAge(lifeTime);
-        response.addCookie(cookie);
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     public static void deleteCookie(HttpServletResponse response,String CookieName){
