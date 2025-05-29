@@ -39,7 +39,7 @@ public class UserEndpoint {
     }
 
 
-    @PostMapping("/reissueToken")
+    @GetMapping("/reissueToken")
     public ResponseEntity<ApiResponse<TokenDto>> reissueToken(@CookieValue(value = "refreshToken") String refreshToken){
         TokenDto token = userService.reissueToken(refreshToken);
 

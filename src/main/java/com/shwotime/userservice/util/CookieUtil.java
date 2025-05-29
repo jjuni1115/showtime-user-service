@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class CookieUtil {
 
-    public static void createCookie(HttpServletResponse response, String cookieName, String cookieValue, String path, Integer lifeTime){
+    public static void createCookie(HttpServletResponse response, String cookieName, String domain, String cookieValue, String path, Integer lifeTime){
         Cookie cookie = new Cookie(cookieName,cookieValue);
+        cookie.setDomain(domain);
         cookie.setPath(path);
         cookie.setHttpOnly(true);
-        //TODO: 추후 true로 변경
-        cookie.setSecure(false);
+        cookie.setSecure(true);
 
+        //cookie.setAttribute("SameSite","None");
 
         cookie.setMaxAge(lifeTime);
         response.addCookie(cookie);
