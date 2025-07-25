@@ -3,6 +3,7 @@ package com.shwotime.userservice.endpoint;
 import com.showtime.coreapi.response.ApiResponse;
 import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
+import com.shwotime.userservice.dto.UserInfo;
 import com.shwotime.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -66,10 +67,11 @@ public class UserEndpoint {
     }
 
     @GetMapping("/user-id")
-    public ResponseEntity<ApiResponse<String>> getUserId(){
-        String userId = userService.getUserId();
+    public ResponseEntity<ApiResponse<UserInfo>> getUserId(){
 
-        return ResponseEntity.ok(ApiResponse.ok(userId,httpServletRequest.getRequestURI()));
+        UserInfo userInfo = userService.getUserInfo();
+
+        return ResponseEntity.ok(ApiResponse.ok(userInfo,httpServletRequest.getRequestURI()));
 
     }
 

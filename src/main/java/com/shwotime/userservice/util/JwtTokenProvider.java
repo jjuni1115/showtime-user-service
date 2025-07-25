@@ -39,6 +39,7 @@ public class JwtTokenProvider {
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .claim("userEmail", user.getEmail())
                 .claim("userName", user.getName())
+                .claim("nickName", user.getNickName())
                 .claim("userId", user.getId())
                 .signWith(key)
                 .compact();
@@ -55,6 +56,7 @@ public class JwtTokenProvider {
                 .expiration(new Date(System.currentTimeMillis() + 36000000))
                 .claim("userEmail", user.getEmail())
                 .claim("userName", user.getName())
+                .claim("nickName", user.getNickName())
                 .claim("userId", user.getId())
                 .signWith(key)
                 .compact();

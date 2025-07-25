@@ -20,6 +20,22 @@ public class JwtUtil {
         return jwtTokenProvider.extractAllClaims(token).get("userEmail").toString();
     }
 
+    public String getUserName(){
+
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization").substring(7);
+
+        return jwtTokenProvider.extractAllClaims(token).get("userName").toString();
+    }
+
+    public String getUserNickName(){
+
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization").substring(7);
+
+        return jwtTokenProvider.extractAllClaims(token).get("nickName").toString();
+    }
+
+
+
     public String getUserEmail(String token){
         return jwtTokenProvider.extractAllClaims(token).get("userEmail").toString();
     }

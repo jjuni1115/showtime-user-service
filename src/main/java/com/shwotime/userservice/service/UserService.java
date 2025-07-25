@@ -3,6 +3,7 @@ package com.shwotime.userservice.service;
 import com.showtime.coreapi.exception.CustomRuntimeException;
 import com.shwotime.userservice.dto.TokenDto;
 import com.shwotime.userservice.dto.UserDto;
+import com.shwotime.userservice.dto.UserInfo;
 import com.shwotime.userservice.entity.AddressEntity;
 import com.shwotime.userservice.entity.UserAddressEntity;
 import com.shwotime.userservice.entity.UserEntity;
@@ -183,8 +184,15 @@ public class UserService {
     }
 
     @Transactional
-    public String getUserId(){
-        return jwtUtil.getUserEmail();
+    public UserInfo getUserInfo(){
+
+        UserInfo userInfo = new UserInfo();
+
+        userInfo.setUserId(jwtUtil.getUserEmail());
+        userInfo.setUserName(jwtUtil.getUserName());
+        userInfo.setNickName(jwtUtil.getUserNickName());
+
+        return userInfo;
     }
 
 }
