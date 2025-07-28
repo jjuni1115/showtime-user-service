@@ -188,7 +188,7 @@ public class UserService {
 
         UserInfo userInfo = new UserInfo();
 
-        userInfo.setUserId(jwtUtil.getUserEmail());
+        userInfo.setUserEmail(jwtUtil.getUserEmail());
         userInfo.setUserName(jwtUtil.getUserName());
         userInfo.setNickName(jwtUtil.getUserNickName());
 

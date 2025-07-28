@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class UserInfo {
 
+    private String userEmail;
     private String userName;
-    private String userId;
     private String nickName;
 
 }
