@@ -66,14 +66,26 @@ public class UserEndpoint {
 
     }
 
-    @GetMapping("/user-id")
-    public ResponseEntity<ApiResponse<UserInfo>> getUserId(){
+    @GetMapping("/login-user-info")
+    public ResponseEntity<ApiResponse<UserInfo>> getLoginUserInfo(){
 
-        UserInfo userInfo = userService.getUserInfo();
+        UserInfo userInfo = userService.getLoginUserInfo();
 
         return ResponseEntity.ok(ApiResponse.ok(userInfo,httpServletRequest.getRequestURI()));
 
     }
+
+    @GetMapping("/user-info/{userId}")
+    public  ResponseEntity<ApiResponse<UserInfo>> getUserInfoById(@PathVariable("userId") Long userId){
+
+        UserInfo userInfo = userService.getUserInfoById(userId);
+
+        return ResponseEntity.ok(ApiResponse.ok(userInfo,httpServletRequest.getRequestURI()));
+
+
+
+    }
+
 
 
 }

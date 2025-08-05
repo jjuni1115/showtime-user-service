@@ -10,5 +10,6 @@ public class UserInfo {
     private String userEmail;
     private String userName;
     private String nickName;
+    private Long userId;
 
 }

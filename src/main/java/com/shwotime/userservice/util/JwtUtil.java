@@ -34,6 +34,13 @@ public class JwtUtil {
         return jwtTokenProvider.extractAllClaims(token).get("nickName").toString();
     }
 
+    public Long getUserId(){
+
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization").substring(7);
+
+        return Long.parseLong(jwtTokenProvider.extractAllClaims(token).get("userId").toString());
+    }
+
 
 
     public String getUserEmail(String token){

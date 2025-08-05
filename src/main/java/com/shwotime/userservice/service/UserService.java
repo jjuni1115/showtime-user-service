@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -184,13 +185,28 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfo getUserInfo(){
+    public UserInfo getLoginUserInfo(){
 
         UserInfo userInfo = new UserInfo();
 
         userInfo.setUserEmail(jwtUtil.getUserEmail());
         userInfo.setUserName(jwtUtil.getUserName());
         userInfo.setNickName(jwtUtil.getUserNickName());
+        userInfo.setUserId(jwtUtil.getUserId());
+
+        return userInfo;
+    }
+
+    @Transactional
+    public UserInfo getUserInfoById(Long userId) {
+
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new CustomRuntimeException(UserErrorCode.USER_NOT_FOUND_EXCEPTION));
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserEmail(userEntity.getEmail());
+        userInfo.setUserName(userEntity.getName());
+        userInfo.setNickName(userEntity.getNickName());
+        userInfo.setUserId(userEntity.getId());
 
         return userInfo;
     }
