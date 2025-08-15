@@ -108,7 +108,7 @@ public class UserService {
             String token = jwtTokenProvider.generateToken(userEntity.getEmail());
             String refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getEmail());
 
-            CookieUtil.createCookie(response, "refreshToken",  "6ec3-218-145-133-193.ngrok-free.app", refreshToken, "/user/reissueToken", 60 * 60 * 24);
+            CookieUtil.createCookie(response, "refreshToken",  "930b-183-98-175-21.ngrok-free.app", refreshToken, "/user-service/user/reissueToken", 60 * 60 * 24);
 
             TokenRedis tokenRedis = TokenRedis.builder()
                     .userEmail(userEntity.getEmail())
@@ -135,7 +135,7 @@ public class UserService {
 
         ServletRequestAttributes servletContainer = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = servletContainer.getResponse();
-        String userEmail = jwtUtil.getUserEmail();
+        String userEmail = jwtUtil.getUserEmail(refreshToken);
 
 
         if (refreshToken != null && jwtTokenProvider.validateTokenSignature(refreshToken) && tokenRepository.findByUserEmail(userEmail).isPresent()) {
@@ -143,7 +143,7 @@ public class UserService {
             String token = jwtTokenProvider.generateToken(userEmail);
             String rotateRefreshToken = jwtTokenProvider.generateRefreshToken(userEmail);
             CookieUtil.deleteCookie(response, "refreshToken");
-            CookieUtil.createCookie(response, "refreshToken", "https://6ec3-218-145-133-193.ngrok-free.app",rotateRefreshToken, "/user/reissueToken", 60 * 60 * 24);
+            CookieUtil.createCookie(response, "refreshToken", "930b-183-98-175-21.ngrok-free.app",rotateRefreshToken, "/user/reissueToken", 60 * 60 * 24);
 
 
             TokenRedis tokenRedis = TokenRedis.builder()

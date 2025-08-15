@@ -37,6 +37,8 @@ dependencies {
 
     implementation 'com.github.jjuni1115:showtime-core-api:1.0.1'
 
+    implementation 'org.springframework.kafka:spring-kafka'
+
     //eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
