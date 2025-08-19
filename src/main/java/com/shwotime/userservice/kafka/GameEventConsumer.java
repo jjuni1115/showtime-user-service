@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameEventConsumer {
 
-    @KafkaListener(topics = "game-events", groupId = "user-service-group")
+    @KafkaListener(topics = "game-event", groupId = "user-service-group")
     public void consumeGameEvent(String message) {
 
         System.out.println("Received game event: " + message);
